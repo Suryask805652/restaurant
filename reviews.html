@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>STACKLY — Reviews & Bookings</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* =========================
+   THEME: Dark Purple + Neon Glow
+   ========================= */
+:root{
+  --bg:#05060a;
+  --panel:#0b0f1b;
+  --muted: rgba(255,255,255,0.78);
+  --accent-1: #9b59ff; /* neon purple */
+  --accent-2: #ff4dd2; /* pink neon */
+  --glow: rgba(155,89,255,0.18);
+  --gold: #ffcc29;
+}
+
+*{box-sizing:border-box; margin:0; padding:0}
+html,body{height:100%}
+body{
+  font-family:'Poppins',sans-serif;
+  background: linear-gradient(180deg, #03040a 0%, #08051a 60%);
+  color:#eaf0ff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+  padding-top:90px;
+}
+
+/* HEADER */
+.main-header{
+  width:100%;
+  padding:14px 60px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background: linear-gradient(180deg, rgba(6,6,12,0.85), rgba(8,6,20,0.6));
+  position:fixed; top:0; left:0; z-index:999;
+  border-bottom: 1px solid rgba(155,89,255,0.06);
+  backdrop-filter: blur(6px);
+}
+.header-left{display:flex;align-items:center;gap:12px}
+.header-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.brand-text h2{font-size:18px;color:var(--gold);font-weight:700}
+.brand-text p{font-size:13px;color:var(--muted); margin-top:2px}
+
+/* NAV */
+.nav-links{display:flex;gap:32px;margin-left:auto;margin-right:20px}
+.nav-links a{color:var(--muted); font-size:16px; text-decoration:none; font-weight:500; padding:8px; border-radius:8px}
+.nav-links a:hover{color:#fff; background: rgba(155,89,255,0.06)}
+
+/* RESERVE BUTTON */
+.reserve-btn{
+  background: linear-gradient(90deg,var(--accent-1),var(--accent-2));
+  padding:10px 20px;border-radius:999px;color:#051023;font-weight:800; box-shadow:0 14px 40px rgba(155,89,255,0.12);
+  text-decoration:none;
+}
+
+/* MOBILE MENU BUTTON */
+.menu-toggle{display:none;background:none;border:none;color:var(--gold);font-size:28px;cursor:pointer;padding:6px}
+@media (max-width:768px){ .nav-links{display:none} .menu-toggle{display:block} }
+
+/* FULLSCREEN MOBILE MENU */
+.mobile-menu{
+  position:fixed; top:0; left:0; width:100vw; height:100vh; background: linear-gradient(180deg,#070417,#09021a);
+  padding:70px 30px; display:flex; flex-direction:column; gap:30px; transform:translateX(100%); transition:transform .35s ease; z-index:1100;
+}
+.mobile-menu.active{transform:translateX(0)}
+.mobile-menu-close{position:absolute; top:24px; right:20px; font-size:40px; background:none; border:none; color:var(--gold); cursor:pointer}
+.mobile-menu a{font-size:22px; color:#fff; text-decoration:none; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.04)}
+
+/* BACKGROUND ANIMATION */
+.background{position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; overflow:hidden}
+.pulse{
+  position:absolute; border-radius:50%; filter: blur(30px); opacity:0.7; mix-blend-mode:screen;
+}
+.p1{width:480px;height:480px; left:-8%; top:-8%; background:linear-gradient(45deg,var(--accent-1),var(--accent-2)); animation:floaty 12s linear infinite}
+.p2{width:300px;height:300px; right:-6%; bottom:-6%; background:linear-gradient(45deg,#4d00ff,#00ffd5); animation:floaty 14s linear infinite}
+@keyframes floaty{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-24px) rotate(10deg)}100%{transform:translateY(0) rotate(0)}}
+
+/* PAGE TITLE */
+.page-title{text-align:center;font-size:40px;margin-top:90px;color:var(--accent-1);text-shadow:0 8px 40px rgba(155,89,255,0.06)}
+
+/* SEND MESSAGE */
+.send-message-section{text-align:center;margin:36px auto; max-width:520px}
+.send-message-section h3{font-size:26px;color:var(--accent-2); margin-bottom:12px}
+.send-message-btn{display:inline-block;background:linear-gradient(90deg,var(--accent-2),var(--accent-1)); color:#050513; padding:14px 36px;border-radius:50px; font-weight:700; box-shadow:0 12px 30px rgba(155,89,255,0.12); text-decoration:none}
+
+/* REVIEWS GRID */
+.reviews-container{width:90%; max-width:1200px; margin:40px auto 24px auto; display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:24px}
+
+/* REVIEW CARD */
+.review-card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
+  border:1px solid rgba(155,89,255,0.06);
+  padding:20px;border-radius:16px; box-shadow:0 8px 30px rgba(4,6,15,0.6); position:relative; overflow:hidden;
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.review-card:hover{transform: translateY(-8px); box-shadow:0 20px 50px rgba(155,89,255,0.08)}
+.review-card::before{content:''; position:absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); background-size:200% 100%; animation:shift 3s ease infinite}
+@keyframes shift{0%{background-position:0%}50%{background-position:100%}100%{background-position:0%}}
+
+/* REVIEW USER */
+.review-user{display:flex; align-items:center; gap:12px}
+.review-user img{width:55px;height:55px;border-radius:50%; border:3px solid rgba(155,89,255,0.28); object-fit:cover; box-shadow:0 8px 30px rgba(155,89,255,0.06)}
+.review-user h3{font-size:18px;color:var(--accent-1); font-weight:700}
+.stars{margin:10px 0;color:#ffd86b;font-size:18px; letter-spacing:3px; text-shadow:0 6px 18px rgba(255,215,107,0.06)}
+.review-text{font-size:14px;color:#dfe9ff; line-height:1.65}
+
+/* ACTIONS */
+.review-actions{margin-top:14px; display:flex; gap:10px}
+.edit-btn, .delete-btn{flex:1;padding:10px;border-radius:10px;border:none;font-weight:600;cursor:pointer}
+.edit-btn{background:linear-gradient(90deg,#00d4ff,#e4dee9); color:#001}
+.delete-btn{background:linear-gradient(90deg,#ff4d4d,#ff6b6b); color:#fff}
+
+/* ADD REVIEW BUTTON */
+.btn-add-review{display:block; width:fit-content; margin:30px auto 60px; padding:14px 36px; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#050513; font-weight:700; border-radius:999px; text-decoration:none; box-shadow:0 14px 40px rgba(155,89,255,0.12)}
+
+/* POPUPS (shared styles) */
+.popup, .booking-popup, .confirm-popup {
+  position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(2,2,6,0.75); display:none; align-items:center; justify-content:center; z-index:2000; padding:20px; backdrop-filter: blur(6px);
+}
+.popup-box, .booking-box, .confirm-box {
+  width:100%; max-width:520px; background: linear-gradient(145deg,#0b1220,#121428); padding:26px; border-radius:16px; border:1px solid rgba(155,89,255,0.08);
+  box-shadow:0 40px 90px rgba(10,6,26,0.75);
+}
+.popup-box h2, .booking-box h2, .confirm-box h2{color:var(--accent-1); text-align:center; margin-bottom:12px}
+.popup-box input, .popup-box select, .popup-box textarea,
+.booking-box input, .booking-box select, .booking-box textarea {
+  width:100%; padding:12px; margin-top:10px; border-radius:12px; border:1px solid rgba(235, 225, 225, 0.04); background: rgba(255,255,255,0.02); color:#4ac08f;
+}
+.popup-box textarea, .booking-box textarea{min-height:100px; resize:vertical}
+.popup-btn, .popup-close, .booking-submit, .booking-close, .confirm-btn, .confirm-close {
+  width:100%; padding:12px; border-radius:10px; margin-top:12px; border:none; font-weight:700; cursor:pointer;
+}
+.popup-btn{background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#06102a}
+.popup-close{background:linear-gradient(90deg,#ff6b6b,#ff4d4d); color:#fff}
+.booking-submit{background: linear-gradient(90deg,#6bffea,#7a5bff); color:#05102a}
+.booking-close{background:linear-gradient(90deg,#ff6b6b,#ff9b6b); color:#fff}
+.confirm-btn{background: linear-gradient(90deg,#22c55e,#06b6d4); color:#041018}
+.confirm-close{background:linear-gradient(90deg,#9b59ff,#ff4dd2); color:#041018}
+
+:root {
+    --gold: #e5c45b;
+    --muted: #c5c5c5cc;
+    --bg-dark: #06061a;
+}
+
+/* FOOTER BASE */
+/* ---------- FOOTER ---------- */
+.stackly-footer {
+  background: #0c0c0c;
+  padding: 60px 8%;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 50px;
+}
+
+.footer-col h3 {
+  font-size: 18px;
+  color: #f4c542;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.footer-col a {
+  display: block;
+  margin: 8px 0;
+  color: #ccc;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.footer-col a:hover {
+  color: #f4c542;
+}
+
+/* Logo + about section */
+.footer-logo-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-logo-box img {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+}
+
+.footer-logo-box h2 {
+  font-size: 22px;
+  color: #fff;
+  margin: 0;
+}
+
+.footer-desc {
+  margin-top: 12px;
+  color: #bbb;
+  line-height: 1.6;
+}
+
+/* Contact icons */
+.footer-col p {
+  color: #ccc;
+  margin: 10px 0;
+}
+
+.footer-col p i {
+  color: #f4c542;
+  margin-right: 10px;
+}
+
+/* Social icons */
+.footer-social {
+  display: flex;
+  gap: 12px;
+}
+
+.footer-social a {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 215, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f4c542;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.footer-social a:hover {
+  background: #f4c542;
+  color: #000;
+}
+
+/* Bottom Line */
+.footer-bottom {
+  text-align: center;
+  margin-top: 50px;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  color: #999;
+}
+
+/* tiny utility */
+.tiny{font-size:13px;color:rgba(255,255,255,0.68)}
+/* ===========================
+   MOBILE MEDIA QUERY
+   Max-width: 768px
+=========================== */
+@media (max-width: 768px) {
+
+  /* BODY */
+  body {
+    padding-top: 70px;
+  }
+
+  /* HEADER */
+  .main-header {
+    padding: 14px 22px;
+  }
+
+  .header-left {
+    gap: 10px;
+  }
+
+  .header-logo {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand-text h2 {
+    font-size: 16px;
+  }
+
+  .brand-text p {
+    font-size: 12px;
+  }
+
+  /* NAVIGATION */
+  .nav-links {
+    display: none !important;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  /* MOBILE MENU */
+  .mobile-menu {
+    padding: 90px 26px;
+  }
+
+  .mobile-menu a {
+    font-size: 20px;
+  }
+
+  /* PAGE TITLE */
+  .page-title {
+    font-size: 32px;
+    margin-top: 40px;
+  }
+
+  /* SEND MESSAGE */
+  .send-message-section {
+    width: 90%;
+  }
+
+  .send-message-section h3 {
+    font-size: 22px;
+  }
+
+  .send-message-btn {
+    padding: 12px 28px;
+    font-size: 15px;
+  }
+
+  /* REVIEWS GRID */
+  .reviews-container {
+    grid-template-columns: 1fr;
+    width: 94%;
+  }
+
+  .review-card {
+    padding: 18px;
+  }
+
+  .review-user img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .review-user h3 {
+    font-size: 16px;
+  }
+
+  .review-text {
+    font-size: 13px;
+  }
+
+  .stars {
+    font-size: 16px;
+  }
+
+  /* POPUPS */
+  .popup-box,
+  .booking-box,
+  .confirm-box {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .popup-box h2,
+  .booking-box h2,
+  .confirm-box h2 {
+    font-size: 20px;
+  }
+
+  .popup-btn,
+  .popup-close,
+  .booking-submit,
+  .booking-close,
+  .confirm-btn,
+  .confirm-close {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  /* FOOTER */
+  .stackly-footer {
+    padding: 40px 6%;
+  }
+
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    text-align: center;
+  }
+
+  .footer-logo-box {
+    justify-content: center;
+  }
+
+  .footer-social {
+    justify-content: center;
+  }
+
+  .footer-bottom {
+    font-size: 13px;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<header class="main-header" role="banner">
+  <div class="header-left">
+
+    <!-- Added Real Logo -->
+    <img src="logo1.webp" alt="STACKLY Logo" class="header-logo">
+
+    <div class="brand-text">
+      <h2>STACKLY</h2>
+      <p class="tiny">Premium Dining Experience</p>
+    </div>
+  </div>
+
+  <nav class="nav-links" role="navigation">
+    <a href="index.html">Home</a>
+    <a href="menu.html">Menu</a>
+    <a href="reviews.html">Reviews</a>
+    <!-- <a href="#booking-section">Book Table</a> -->
+    <a href="contact.html">Contact</a>
+    <a href="Login.html">Login</a>
+  </nav>
+
+  <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+</header>
+
+<!-- MOBILE MENU -->
+<nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <button class="mobile-menu-close" id="menuClose" aria-label="Close menu">×</button>
+  <a href="index.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="reviews.html">Reviews</a>
+  <a href="contact.html">Contact</a>
+  <a href="login.html">Login</a>
+</nav>
+
+<!-- PAGE TITLE -->
+<h1 class="page-title">Customer Reviews</h1>
+
+<!-- SEND MESSAGE SECTION -->
+<section class="send-message-section" aria-labelledby="sendMsgTitle">
+  <h3 id="sendMsgTitle">Send a Message</h3>
+  <a href="contact.html" class="send-message-btn">Send a Message</a>
+</section>
+
+<!-- REVIEWS GRID -->
+<div class="reviews-container" id="reviewsContainer" aria-live="polite">
+  <!-- example existing reviews -->
+  <div class="review-card">
+    <div class="review-user">
+      <img src="https://i.ibb.co/5GPvWk0/user1.jpg" alt="Aarav">
+      <h3>Aarav Kumar</h3>
+    </div>
+    <div class="stars">★★★★★</div>
+    <p class="review-text">The best fine dining experience ever. Exceptional service and food quality.</p>
+    <div class="review-actions">
+      <button class="edit-btn">Edit</button>
+      <button class="delete-btn">Delete</button>
+    </div>
+  </div>
+
+  <div class="review-card">
+    <div class="review-user">
+      <img src="https://i.ibb.co/vmjL3BV/user2.jpg" alt="Priya">
+      <h3>Priya Singh</h3>
+    </div>
+    <div class="stars">★★★★★</div>
+    <p class="review-text">Loved the food! Worth every rupee. Atmosphere was perfect.</p>
+    <div class="review-actions">
+      <button class="edit-btn">Edit</button>
+      <button class="delete-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Buttons -->
+<a href="#" class="btn-add-review" id="addReviewBtn">Write a Review</a>
+<a href="#booking-section" class="btn-add-review" id="bookTableBtn" style="background:linear-gradient(90deg,#22c55e,#06b6d4); margin-top:6px">Reserve a Table</a>
+
+<!-- REVIEW POPUP -->
+<div class="popup" id="reviewPopup" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="popup-box" role="document">
+    <h2>Write a Review</h2>
+    <input id="revName" type="text" placeholder="Your Name" aria-label="Name">
+    <select id="revStars" aria-label="Stars">
+      <option value="5">5 Stars</option>
+      <option value="4">4 Stars</option>
+      <option value="3">3 Stars</option>
+      <option value="2">2 Stars</option>
+      <option value="1">1 Star</option>
+    </select>
+    <textarea id="revText" placeholder="Share your dining experience..." aria-label="Review text"></textarea>
+    <button class="popup-btn" id="submitReviewBtn">Submit Review</button>
+    <button class="popup-close" id="closeReviewPopup">Cancel</button>
+  </div>
+</div>
+
+<!-- BOOKING POPUP -->
+<div class="booking-popup" id="bookingPopup" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="booking-box" role="document">
+    <h2>Reserve a Table</h2>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <input id="bkName" type="text" placeholder="Full name" aria-label="Full name">
+      <input id="bkPhone" type="tel" placeholder="Phone (e.g. +91 9XXXXXXXXX)" aria-label="Phone">
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <input id="bkEmail" type="email" placeholder="Email (optional)" aria-label="Email">
+      <select id="bkGuests" aria-label="Guests">
+        <option value="">Guests</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6+</option>
+      </select>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+      <input id="bkDate" type="date" aria-label="Date">
+      <input id="bkTime" type="time" aria-label="Time">
+    </div>
+
+    <select id="bkTableType" aria-label="Table Type" style="margin-top:10px;">
+      <option value="">Table type</option>
+      <option>Indoor</option>
+      <option>Outdoor</option>
+      <option>Private Room</option>
+    </select>
+
+    <textarea id="bkRequests" placeholder="Special requests (optional)" style="margin-top:10px;"></textarea>
+
+    <button class="booking-submit" id="submitBookingBtn">Request Reservation</button>
+    <button class="booking-close" id="closeBookingBtn">Cancel</button>
+    <div class="tiny" style="margin-top:8px; color:rgba(255,255,255,0.6)">Reservations subject to availability. We will reach out to confirm.</div>
+  </div>
+</div>
+
+<!-- CONFIRMATION POPUP -->
+<div class="confirm-popup" id="confirmPopup" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="confirm-box" role="document">
+    <h2>Reservation Requested</h2>
+    <div id="confirmSummary" class="tiny" style="margin-top:6px; color:rgba(255,255,255,0.9)"></div>
+
+    <button class="confirm-btn" id="confirmWhatsAppBtn"><i class="404.html"></i> &nbsp; Confirm via WhatsApp</button>
+    <button class="confirm-close" id="closeConfirmBtn">Close</button>
+  </div>
+</div>
+
+<!-- CONTINUE FROM YOUR LAST LINE -->
+    
+
+<!-- FOOTER -->
+<footer class="stackly-footer">
+  <div class="footer-container">
+
+    <!-- Logo + Description -->
+    <div class="footer-col about">
+      <div class="footer-logo-box">
+        <img src="logo1.webp" alt="STACKLY Logo">
+        <h2>STACKLY</h2>
+      </div>
+
+      <p class="footer-desc">
+        Fine Dining & Private Events  
+        Experience luxury dining with handcrafted dishes and a neon-lit ambience.
+      </p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-col">
+      <h3>Quick Links</h3>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-col">
+      <h3>Contact</h3>
+
+      <p><i class="fas fa-map-marker-alt"></i> 123 Premium St, Food City</p>
+      <p><i class="fas fa-phone"></i> +91 80565 22920</p>
+      <p><i class="far fa-clock"></i> 11:00 AM – 11:00 PM</p>
+    </div>
+
+    <!-- Social -->
+    <div class="footer-col">
+      <h3>Follow Us</h3>
+
+      <div class="footer-social">
+        <a href="404.html"><i class="fab fa-instagram"></i></a>
+        <a href="404.html"><i class="fab fa-facebook-f"></i></a>
+        <a href="404.html"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">© 2025 STACKLY — All Rights Reserved</div>
+</footer>
+
+<!-- ======================
+     JAVASCRIPT
+====================== -->
+<script>
+// MOBILE MENU
+const menuToggle = document.getElementById("menuToggle");
+const menuClose = document.getElementById("menuClose");
+const mobileMenu = document.getElementById("mobileMenu");
+
+menuToggle.addEventListener("click", () => mobileMenu.classList.add("active"));
+menuClose.addEventListener("click", () => mobileMenu.classList.remove("active"));
+
+// REVIEW SYSTEM
+const reviewPopup = document.getElementById("reviewPopup");
+const addReviewBtn = document.getElementById("addReviewBtn");
+const submitReviewBtn = document.getElementById("submitReviewBtn");
+const closeReviewPopup = document.getElementById("closeReviewPopup");
+
+const reviewsContainer = document.getElementById("reviewsContainer");
+const revName = document.getElementById("revName");
+const revStars = document.getElementById("revStars");
+const revText = document.getElementById("revText");
+
+addReviewBtn.addEventListener("click", () => reviewPopup.style.display="flex");
+closeReviewPopup.addEventListener("click", () => reviewPopup.style.display="none");
+
+submitReviewBtn.addEventListener("click", ()=>{
+  if(!revName.value || !revText.value) return alert("Fill all fields!");
+
+  const card = document.createElement("div");
+  card.className="review-card";
+  card.innerHTML = `
+    <div class="review-user">
+      <img src="https://i.ibb.co/5GPvWk0/user1.jpg">
+      <h3>${revName.value}</h3>
+    </div>
+    <div class="stars">${"★".repeat(revStars.value)}</div>
+    <p class="review-text">${revText.value}</p>
+    <div class="review-actions">
+      <button class="edit-btn">Edit</button>
+      <button class="delete-btn">Delete</button>
+    </div>
+  `;
+  reviewsContainer.appendChild(card);
+  revName.value="";
+  revText.value="";
+  reviewPopup.style.display="none";
+});
+
+// RESERVATION FORM
+const bookingPopup = document.getElementById("bookingPopup");
+const submitBookingBtn = document.getElementById("submitBookingBtn");
+const closeBookingBtn = document.getElementById("closeBookingBtn");
+const confirmPopup = document.getElementById("confirmPopup");
+const closeConfirmBtn = document.getElementById("closeConfirmBtn");
+const confirmCancelBtn = document.getElementById("confirmCancelBtn");
+const bookTableBtn = document.getElementById("bookTableBtn");
+const confirmSummary = document.getElementById("confirmSummary");
+
+bookTableBtn.addEventListener("click",(e)=>{
+  e.preventDefault();
+  bookingPopup.style.display="flex";
+});
+
+closeBookingBtn.addEventListener("click",()=> bookingPopup.style.display="none");
+
+submitBookingBtn.addEventListener("click",() => {
+  const name = document.getElementById("bkName").value;
+  const phone = document.getElementById("bkPhone").value;
+  const guests = document.getElementById("bkGuests").value;
+  const date = document.getElementById("bkDate").value;
+  const time = document.getElementById("bkTime").value;
+
+  if(!name || !phone || !guests || !date || !time){
+    return alert("Please fill all required fields!");
+  }
+
+  confirmSummary.innerHTML = `
+    <strong>Name:</strong> ${name}<br>
+    <strong>Phone:</strong> ${phone}<br>
+    <strong>Date:</strong> ${date}<br>
+    <strong>Time:</strong> ${time}<br>
+    <strong>Guests:</strong> ${guests}
+  `;
+
+  bookingPopup.style.display="none";
+  confirmPopup.style.display="flex";
+});
+
+closeConfirmBtn.addEventListener("click",()=> confirmPopup.style.display="none");
+confirmCancelBtn.addEventListener("click",()=> confirmPopup.style.display="none");
+
+document.getElementById("confirmWhatsAppBtn").addEventListener("click", function () {
+    window.location.href = "404.html";  // ← Your 404 page
+});
+
+
+</script>
+
+</body>
+</html>

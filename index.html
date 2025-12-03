@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>STACKLY — Premium Dining</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --bg1:#0f0c23; --bg2:#081226; --accent:#39ff14; --gold:#d4af37;
+    }
+    *{box-sizing:border-box; margin:0; padding:0;}
+    html,body{height:100%;}
+    body{
+      font-family:'Poppins',sans-serif; color:#e9eef8; background:linear-gradient(120deg,var(--bg1),var(--bg2));
+      overflow-x:hidden;
+    }
+
+    /* ======================
+       STACKLY HEADER
+    =========================*/
+    .stackly-header {
+      width: 100%;
+      padding: 14px 60px;
+      background: #0b0c14; 
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: fixed;
+      top: 0;
+      z-index: 999;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      background: #fff;
+      object-fit: contain;
+    }
+
+    .header-brand h2 {
+      color: #f9d342;
+      font-size: 18px;
+      margin-bottom: 2px;
+      font-weight: 700;
+    }
+
+    .header-brand p {
+      color: #c8c8c8;
+      font-size: 15px;
+      margin-top: -2px;
+    }
+
+    .header-menu {
+      display: flex;
+      gap: 32px;
+      margin-left: 35%;
+    }
+
+    .header-menu a {
+      color: #ffffff;
+      font-weight: 500;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .header-menu a:hover {
+      opacity: 0.7;
+    }
+/* Parent container */
+.has-submenu {
+  position: relative;
+  display: inline-block;
+}
+
+/* Hide submenu by default */
+.submenu {
+  display: none;
+  position: absolute;
+  top: 100%; /* below parent */
+  left: 0;
+  background: rgba(174, 172, 185, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 0;
+  border-radius: 5px;
+  min-width: 150px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  flex-direction: column;
+}
+
+/* Submenu links */
+.submenu a {
+  display: block;
+  color: var(--gold-primary);
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-family: 'Cinzel', serif;
+  transition: background 0.3s;
+}
+
+.submenu a:hover {
+  background: var(--platinum);
+  color: #111;
+}
+
+/* Show submenu on hover */
+.has-submenu:hover .submenu {
+  display: flex;
+}
+
+
+    /* Reserve Button */
+    .reserve-btn {
+      background: #21ff8f;
+      padding: 10px 28px;
+      border-radius: 30px;
+      color: #000;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0px 0px 20px rgba(33,255,143,0.8);
+      transition: 0.3s;
+    }
+
+    .reserve-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Mobile Menu Toggle Button */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #f9d342;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 1001;
+    }
+
+    /* Mobile Menu Styles */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      height: 100vh;
+      background: #0b0c14;
+      backdrop-filter: blur(15px);
+      border-left: 1px solid rgba(255,255,255,0.1);
+      z-index: 1000;
+      padding: 80px 30px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .mobile-menu-close {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      background: none;
+      border: none;
+      color: #f9d342;
+      font-size: 28px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .mobile-menu a {
+      color: #ffffff;
+      font-weight: 500;
+      text-decoration: none;
+      font-size: 18px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: 0.3s;
+    }
+
+    .mobile-menu a:hover {
+      color: #f9d342;
+      padding-left: 15px;
+    }
+
+    .mobile-menu .reserve-btn {
+      margin-top: 20px;
+      padding: 15px 30px;
+      font-size: 16px;
+    }
+
+    .mobile-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Neon animated gradient background */
+    .neon-bg{position:fixed; inset:0; z-index:-2;}
+    .neon-gradient{
+      position:absolute; inset:-20% -10%; background:conic-gradient(from 180deg at 50% 50%, rgba(57,255,20,0.06), rgba(212,175,55,0.05), rgba(57,255,20,0.06));
+      filter:blur(60px); animation:rotate 12s linear infinite; mix-blend-mode:screen; opacity:0.9;
+    }
+    @keyframes rotate{from{transform:rotate(0deg)} to{transform:rotate(360deg)}}
+
+    /* soft grid lines overlay */    
+    .grid-overlay{position:fixed; inset:0; z-index:-1; background-image: radial-gradient(rgba(255,255,255,0.012) 1px, transparent 1px); background-size:40px 40px; opacity:0.06}
+
+    /* Mobile menu */
+    .menu-btn{display:none}
+    @media(max-width:880px){nav{display:none} .menu-toggle{display:block}}
+
+    /* Hero */
+    .hero{min-height:80vh; display:flex; align-items:center; padding:110px 6% 60px; gap:40px}
+    .hero-left{flex:1; max-width:720px}
+    .hero-left h1{font-size:48px; line-height:1.02; margin-bottom:14px; text-shadow:0 6px 40px rgba(57,255,20,0.05)}
+    .hero-left p{opacity:0.9; margin-bottom:22px}
+    .hero-actions{display:flex; gap:14px; align-items:center}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),#9dfcff); color:#001; padding:12px 18px; border-radius:999px; font-weight:700}
+    .btn-outline{border:1px solid rgba(255,255,255,0.08); padding:10px 16px; border-radius:10px}
+
+    .hero-right{flex:1; display:flex; justify-content:center}
+    .mockup{width:320px; border-radius:18px; overflow:hidden; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12)); border:1px solid rgba(255,255,255,0.04); box-shadow:0 20px 60px rgba(2,6,23,0.6)}
+    .mockup img{width:100%; display:block}
+
+    /* Features */
+    .features{padding:60px 6%; display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+    .feature-card{background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01)); padding:22px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)}
+    .feature-card h3{color:var(--gold); margin-bottom:8px}
+
+    /* Menu grid - REMOVED ORDER BUTTONS */
+    .menu{padding:30px 6%}
+    .menu-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px}
+    .menu-item{padding:20px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.012), rgba(0,0,0,0.08)); border:1px solid rgba(255,255,255,0.03); text-align:center}
+    .menu-item img{width:100%; height:140px; object-fit:cover; border-radius:10px; margin-bottom:12px}
+    .menu-info h4{margin-bottom:8px; color:var(--gold)}
+    .menu-info .price{font-size:18px; font-weight:600; color:var(--accent)}
+
+    /* Reviews */
+    .reviews{padding:40px 6%}
+    .review-cards{display:flex; gap:14px; overflow:auto; padding-bottom:6px}
+    .review{min-width:260px; padding:14px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.06)); border:1px solid rgba(255,255,255,0.03)}
+
+    /* Footer centered luxe */
+    /* ==========================
+   PREMIUM STACKLY FOOTER
+========================== */
+.stackly-footer {
+  background: #0b0c14;
+  padding: 50px 6% 25px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  margin-top: 40px;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 40px;
+}
+
+.footer-col h3 {
+  color: var(--gold);
+  font-size: 22px;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.footer-col h4 {
+  color: var(--gold);
+  font-size: 18px;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.footer-text {
+  color: #c7c7c7;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.footer-col a {
+  display: block;
+  color: #e9eef8;
+  font-size: 15px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  opacity: 0.85;
+  transition: 0.3s;
+}
+
+.footer-col a:hover {
+  color: var(--gold);
+  opacity: 1;
+  padding-left: 6px;
+}
+
+.footer-logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  background: white;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.footer-socials a {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 20px;
+  color: var(--gold);
+  background: linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: 0.3s;
+}
+
+.footer-socials a:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+  transform: scale(1.12);
+  box-shadow: 0 0 12px rgba(212,175,55,0.5);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  color: #999;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media(max-width: 600px) {
+  .footer-socials a {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+}
+
+    /* WhatsApp-style button */
+    .wa-order-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:linear-gradient(90deg,#25d366,#128c7e);
+      color:#fff;
+      padding:12px 22px;
+      border-radius:999px;
+      font-size:16px;
+      font-weight:700;
+      text-decoration:none;
+      box-shadow:0 4px 16px rgba(18,140,126,0.25);
+      transition:0.25s ease;
+    }
+
+    .wa-order-btn i{font-size:20px;}
+    .wa-order-btn:hover{transform:scale(1.05);}
+
+    .wa-btn-left{width:100%; display:flex; justify-content:flex-start; margin-top:15px;}
+
+    .wa-fixed-left{position:fixed; bottom:18px; left:18px; z-index:9999;}
+
+    .muted{opacity:0.85}
+
+    /* ============================
+       RESPONSIVE DESIGN — STACKLY
+    ==============================*/
+
+    @media (max-width: 1024px) {
+      .stackly-header { padding: 14px 30px; }
+      .header-menu { gap: 24px; margin-left: 20%; }
+      .hero { padding: 120px 4% 40px; gap: 30px; }
+      .hero-left h1 { font-size: 42px; }
+      .features { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .header-menu { display: none; }
+      .menu-toggle { display: block; }
+      .stackly-header { padding: 14px 20px; justify-content: space-between; }
+      .hero { flex-direction: column; text-align: center; padding: 110px 4% 40px; }
+      .hero-left h1 { font-size: 36px; }
+      .hero-left p { font-size: 15px; }
+      .hero-actions { justify-content: center; flex-wrap: wrap; }
+      .hero-right { order: -1; }
+      .features { grid-template-columns: 1fr; }
+      .menu-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+      .mobile-menu { width: 100%; right: -100%; }
+      .wa-fixed-left { left:12px; bottom:12px; }
+    }
+
+    @media (max-width: 480px) {
+      .stackly-header { padding: 10px 16px; }
+      .header-brand h2 { font-size: 16px; }
+      .hero-left h1 { font-size: 30px; }
+      .mockup { width: 260px; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .wa-order-btn { padding:10px 16px; font-size:15px; }
+    }
+.home-submenu {
+  display: none;
+  flex-direction: column;
+  padding-left: 20px;
+  animation: dropdown .3s ease;
+}
+
+@keyframes dropdown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mobile-item a {
+  padding: 12px 20px;
+  display: block;
+}
+/* ==========================
+   ADVERTISEMENT POPUP
+========================== */
+.ad-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  z-index: 9998;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.35s ease;
+}
+
+.ad-popup-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ad-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 350px;
+  max-width: 90%;
+  padding: 22px;
+  background: #0b0c14;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  text-align: center;
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+  z-index: 9999;
+  transition: 0.35s ease;
+  box-shadow: 0 0 50px rgba(212,175,55,0.3);
+}
+
+.ad-popup.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.ad-img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+
+.ad-title {
+  font-size: 22px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.ad-text {
+  color: #ccc;
+  font-size: 15px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.ad-btn {
+  display: inline-block;
+  padding: 12px 26px;
+  background: linear-gradient(90deg, var(--accent), #9dfcff);
+  color: #001;
+  font-weight: 700;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.ad-btn:hover {
+  transform: scale(1.05);
+}
+
+.ad-close {
+  background: none;
+  border: none;
+  color: var(--gold);
+  font-size: 22px;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  cursor: pointer;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .ad-popup {
+    width: 90%;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+  <!-- Neon & overlays -->
+  <div class="neon-bg" aria-hidden>
+    <div class="neon-gradient" style="width:140%; height:140%; left:-20%; top:-20%"></div>
+  </div>
+  <div class="grid-overlay" aria-hidden></div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <header class="stackly-header">
+    <div class="header-left">
+      <img src="logo1.webp" alt="Stackly Logo" class="header-logo">
+      <div class="header-brand">
+        <h2>STACKLY</h2>
+        <p>Premium Dining Experience</p>
+      </div>
+    </div>
+
+    <!-- Desktop Menu -->
+    <nav class="header-menu">
+  <div class="desktop-link has-submenu">
+    <a href="index.html" class="parent-link">Home</a>
+    <div class="submenu">
+      <a href="home2.html" class="submenu-link">Home2</a>
+    </div>
+  </div>
+
+  <a href="menu.html">Menu</a>
+  <a href="reviews.html">Reviews</a>
+  <a href="contact.html">Contact</a>
+  <a href="login.html">Login</a>
+</nav>
+
+
+
+    <!-- Reserve Button Desktop -->
+    <!-- <a href="contact.html" class="reserve-btn">Reserve</a> -->
+
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
+      <i class="fas fa-bars"></i>
+    </button>
+  </header>
+
+  <!-- Mobile Menu -->
+  <nav class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+    <i class="fas fa-times"></i>
+  </button>
+
+  <div class="mobile-item has-sub">
+    <a href="#" class="home-btn">Home</a>
+    <div class="home-submenu">
+      <a href="home2.html">Home 2</a>
+    </div>
+  </div>
+
+  <a href="menu.html">Menu</a>
+  <a href="reviews.html">Reviews</a>
+  <a href="contact.html">Contact</a>
+  <a href="login.html">Login</a>
+</nav>
+
+  <!-- Hero -->
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-left">
+        <h1>Discover culinary artistry — at <span style="color:var(--gold)">STACKLY</span></h1>
+        <p>Handcrafted dishes, a neon-lit ambience, and service that remembers your taste. Book a table or order directly via WhatsApp.</p>
+        <div class="hero-actions">
+          <a href="#menu" class="btn-primary">View Menu</a>
+          <a href="404.html" class="btn-primary">Book a Table</a>
+        </div>
+
+        <!-- Left-aligned WhatsApp-style button -->
+        <div class="wa-btn-left">
+          <a href="404.html" class="wa-order-btn" aria-label="Order Now on WhatsApp">
+            <i class="fab fa-whatsapp" aria-hidden="true"></i> Order Now
+          </a>
+        </div>
+
+        <div style="margin-top:22px; display:flex; gap:18px; flex-wrap:wrap; justify-content:center;">
+          <div style="padding:12px; border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03)">
+            <div style="font-weight:700">Open Today</div>
+            <div class="muted">11:00 AM — 11:00 PM</div>
+          </div>
+          <div style="padding:12px; border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03)">
+            <div style="font-weight:700">Location</div>
+            <div class="muted">123 Premium St, Food City</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="mockup">
+          <img src="burger.webp" alt="Premium dish showcase">
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" aria-label="Why choose us">
+      <div class="feature-card">
+        <h3>Chef's Signature</h3>
+        <p class="muted">World-class chefs craft every dish using locally sourced ingredients.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Ambience</h3>
+        <p class="muted">Neon-glow interiors and curated music for an unforgettable night.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Lightning Service</h3>
+        <p class="muted">Order quickly via WhatsApp with one tap — we confirm in minutes.</p>
+      </div>
+    </section>
+
+    <!-- Menu -->
+    <section class="menu" id="menu">
+      <h2 style="color:var(--gold); text-align:center; margin-bottom:10px;">Best Sellers</h2>
+      <p class="muted" style="text-align:center; max-width:600px; margin:0 auto 30px;">Our signature dishes crafted with premium ingredients and chef's special touch</p>
+
+      <div class="menu-grid" id="menuGrid">
+        <!-- Menu items will be populated by JavaScript -->
+      </div>
+    </section>
+
+    <!-- Reviews -->
+    <section class="reviews" id="reviews">
+      <h2 style="color:var(--gold); text-align:center; margin-bottom:30px;">What guests say</h2>
+      <div class="review-cards" id="reviewsRow">
+        <div class="review"><strong>Akash</strong><div class="muted">Delicious and quick delivery. Ambience is perfect.</div></div>
+        <div class="review"><strong>Priya</strong><div class="muted">Loved the steak — perfectly cooked.</div></div>
+        <div class="review"><strong>Rohan</strong><div class="muted">Great service and the neon theme is so cool.</div></div>
+        <div class="review"><strong>Neha</strong><div class="muted">Best fine dining experience in the city!</div></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================
+     STACKLY ADVERTISEMENT POPUP
+============================== -->
+<div class="ad-popup-overlay" id="adPopupOverlay"></div>
+
+<div class="ad-popup" id="adPopup">
+  <button class="ad-close" id="adClose"><i class="fas fa-times"></i></button>
+
+  <img src="burger.webp" alt="Offer" class="ad-img">
+  
+
+  <h2 class="ad-title">🔥 Special Festival Offer!</h2>
+  <p class="ad-text">
+    Get <strong style="color:#39ff14;">20% OFF</strong> on all premium dishes.  
+    Limited time only!
+  </p>
+
+  <a href="menu.html" class="ad-btn">Explore Menu</a>
+</div>
+
+
+  <!-- Footer -->
+  <!-- ==========================
+        STACKLY PREMIUM FOOTER
+=========================== -->
+<footer class="stackly-footer">
+  <div class="footer-container">
+
+    <!-- Brand -->
+    <div class="footer-col">
+      <div class="footer-logo-wrap">
+        <img src="logo1.webp" alt="Stackly" class="footer-logo">
+        <div>
+          <h3>STACKLY</h3>
+          <p>Fine Dining & Private Events</p>
+        </div>
+      </div>
+      <p class="footer-text">
+        Experience luxury dining with handcrafted dishes and a neon-lit ambience.
+      </p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p class="footer-text">📍 123 Premium St, Food City</p>
+      <p class="footer-text">📞 +91 80565 22920</p>
+      <p class="footer-text">⏱ 11:00 AM – 11:00 PM</p>
+    </div>
+
+    <!-- Social -->
+    <div class="footer-col">
+      <h4>Follow Us</h4>
+      <div class="footer-socials">
+        <a href="404.html"><i class="fab fa-instagram"></i></a>
+        <a href="404.html"><i class="fab fa-facebook-f"></i></a>
+        <a href="404.html"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © <span id="year"></span> STACKLY — All Rights Reserved
+  </div>
+</footer>
+
+  <script>
+    // Set current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menu data (no order buttons)
+    const menu = [
+      {id:1, name:'Royal Beef Steak', price:599, img:'beef.webp'},
+      {id:2, name:'Grilled Chicken', price:350, img:'garilled.webp'},
+      {id:3, name:'Cheesy Delight Pizza', price:420, img:'cheesypizza.webp'},
+      {id:4, name:'Truffle Pasta', price:480, img:'pasta.webp'},
+      {id:5, name:'Seafood Platter', price:799, img:'seafood.webp'},
+      {id:6, name:'Veg Biryani', price:280, img:'vegbiryani.webp'}
+    ];
+
+    // Populate menu grid
+    const menuGrid = document.getElementById('menuGrid');
+
+// Example exchange rate: 1 INR = 0.012 USD
+const exchangeRate = 0.012;
+
+menu.forEach(d => {
+  const div = document.createElement('div'); 
+  div.className = 'menu-item';
+
+  // Convert price to USD
+  const priceInUSD = (d.price * exchangeRate).toFixed(2);
+
+  div.innerHTML = `
+    <img src="${d.img}" alt="${d.name}" loading="lazy">
+    <div class="menu-info">
+      <h4>${d.name}</h4>
+      <div class="price">₹${priceInUSD}</div>
+    </div>
+  `;
+  menuGrid.appendChild(div);
+})
+
+
+    // Mobile menu functionality
+const menuToggle = document.getElementById('menuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileMenuClose = document.getElementById('mobileMenuClose');
+const mobileOverlay = document.getElementById('mobileOverlay');
+
+function openMobileMenu() {
+  mobileMenu.classList.add('active');
+  mobileOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileMenu() {
+  mobileMenu.classList.remove('active');
+  mobileOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+  homeSub.style.display = 'none'; // Hide submenu when closed
+}
+
+menuToggle.addEventListener('click', openMobileMenu);
+mobileMenuClose.addEventListener('click', closeMobileMenu);
+mobileOverlay.addEventListener('click', closeMobileMenu);
+
+// Home submenu toggle
+const homeBtn = document.querySelector('.home-btn');
+const homeSub = document.querySelector('.home-submenu');
+
+homeBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  homeSub.style.display = homeSub.style.display === 'flex' ? 'none' : 'flex';
+});
+
+    // Auto-scroll reviews (slow and subtle)
+    const reviewsRow = document.getElementById('reviewsRow');
+    let scrollPos = 0;
+    setInterval(()=>{
+      scrollPos += 0.5;
+      if(scrollPos > reviewsRow.scrollWidth - reviewsRow.clientWidth) scrollPos = 0;
+      reviewsRow.scrollTo({left:scrollPos, behavior:'auto'});
+    }, 100);
+    
+const homeParent = document.querySelector('.has-submenu');
+const submenu = homeParent.querySelector('.submenu');
+
+homeParent.querySelector('.parent-link').addEventListener('click', (e) => {
+  e.preventDefault(); // prevent default link behavior
+  submenu.style.display = submenu.style.display === 'flex' ? 'none' : 'flex';
+});
+
+// Optional: close submenu when clicking outside
+document.addEventListener('click', (e) => {
+  if(!homeParent.contains(e.target)) {
+    submenu.style.display = 'none';
+  }
+});
+
+
+// ==========================
+// Advertisement Popup Logic
+// ==========================
+
+const adPopup = document.getElementById("adPopup");
+const adOverlay = document.getElementById("adPopupOverlay");
+const adClose = document.getElementById("adClose");
+
+// Show popup after 3 seconds
+setTimeout(() => {
+  adPopup.classList.add("active");
+  adOverlay.classList.add("active");
+}, 3000);
+
+// Close popup
+adClose.addEventListener("click", () => {
+  adPopup.classList.remove("active");
+  adOverlay.classList.remove("active");
+});
+
+adOverlay.addEventListener("click", () => {
+  adPopup.classList.remove("active");
+  adOverlay.classList.remove("active");
+});
+
+  </script>
+</body>
+</html>

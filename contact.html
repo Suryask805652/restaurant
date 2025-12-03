@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STACKLY — Contact</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+    font-family:'Poppins',sans-serif;
+    background:#060b12;
+    color:#fff;
+    overflow-x:hidden;
+}
+
+/* ================= HEADER ================= */
+.main-header{
+    width:100%;
+    padding:18px 60px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#090b12;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:200;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    width:50px;
+    height:50px;
+    object-fit:contain;
+}
+
+.brand-text h2{
+    font-size:20px;
+    font-weight:700;
+    color:#ffcc29;
+}
+
+.brand-text p{
+    font-size:14px;
+    color:#c9d1d9;
+}
+
+.nav-links{
+    display:flex;
+    gap:35px;
+    margin-left:auto;
+    margin-right:40px;
+}
+
+.nav-links a{
+    color:#d9d9d9;
+    font-size:17px;
+    text-decoration:none;
+    font-weight:500;
+    transition:.3s;
+}
+
+.nav-links a:hover{color:#fff;}
+
+body{padding-top:100px;}
+
+/* ================= MOBILE MENU ================= */
+.mobile-menu-btn{
+    display:none;
+    font-size:28px;
+    color:#fff;
+    cursor:pointer;
+}
+
+/* Full-screen mobile menu */
+/* ================= MOBILE MENU (Matches Screenshot) ================= */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0b0e17;       /* Darker like the screenshot */
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;   /* Left aligned text */
+    justify-content: flex-start;
+    gap: 25px;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s ease-in-out;
+    z-index: 300;
+}
+
+.mobile-menu.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.mobile-menu a {
+    font-size: 18px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    width: 100%;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Line like screenshot */
+}
+
+.close-menu {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 28px;
+    color: #ffcc29;   /* Yellow close button - matches screenshot */
+    cursor: pointer;
+}
+
+/* Hide desktop nav on mobile */
+@media(max-width:900px){
+    .nav-links{
+        display:none;
+    }
+    .mobile-menu-btn{
+        display:block;
+    }
+}
+
+/* ================= BACKGROUND ANIMATION ================= */
+.bg-anim{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    overflow:hidden;
+    z-index:-1;
+    background:radial-gradient(circle at top,#0d1b2a,#000);
+}
+
+.bubble{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,204,41,0.15);
+    animation:floatUp 12s linear infinite;
+}
+
+@keyframes floatUp {
+    0%{transform:translateY(100vh) scale(0.6);opacity:0;}
+    50%{opacity:1;}
+    100%{transform:translateY(-100vh) scale(1.2);opacity:0;}
+}
+
+/* TITLE */
+.page-title{
+    text-align:center;
+    font-size:45px;
+    margin-top:40px;
+    color:#ffcc29;
+    text-shadow:0 0 25px rgba(255,204,41,0.5);
+}
+
+/* CONTACT WRAPPER */
+.contact-wrapper{
+    width:90%;
+    max-width:1200px;
+    margin:50px auto 120px auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+}
+
+/* LEFT: INFO CARD */
+.info-card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:15px;
+    padding:30px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.info-card h3{
+    font-size:26px;
+    color:#ffcc29;
+    margin-bottom:15px;
+}
+
+.info-item{
+    margin-bottom:18px;
+}
+
+.info-item h4{
+    font-size:18px;
+    color:#71ffd8;
+}
+
+.info-item p{
+    font-size:15px;
+    color:#ccc;
+    margin-top:5px;
+}
+
+.map{
+    width:100%;
+    margin-top:20px;
+    border-radius:12px;
+    overflow:hidden;
+    border:2px solid rgba(255,255,255,0.1);
+}
+
+/* RIGHT: FORM */
+.form-card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:15px;
+    padding:30px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+.form-card h3{
+    text-align:center;
+    color:#71ffd8;
+    margin-bottom:20px;
+    font-size:27px;
+}
+
+.form-card input,
+.form-card textarea{
+    width:100%;
+    padding:14px;
+    margin-top:12px;
+    background:#102030;
+    border:1px solid #1f3347;
+    border-radius:10px;
+    color:#fff;
+    font-size:15px;
+}
+
+.form-card textarea{
+    height:120px;
+    resize:none;
+}
+
+.send-btn{
+    width:100%;
+    padding:12px;
+    background:linear-gradient(120deg,#00ffcc,#00d4ff);
+    border:none;
+    border-radius:10px;
+    font-weight:700;
+    font-size:17px;
+    color:#000;
+    margin-top:20px;
+    cursor:pointer;
+    box-shadow:0 0 12px rgba(0,255,200,0.6);
+    transition:.3s;
+}
+
+.send-btn:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 20px rgba(0,255,200,1);
+}
+
+.error-msg {
+    color: #ff4c4c;
+    font-size: 13px;
+    margin-top: 4px;
+    display: block;
+}
+
+@media(max-width:900px){
+    .contact-wrapper{
+        grid-template-columns:1fr;
+    }
+}
+
+/* ================= FOOTER ================= */
+/* ======================== FOOTER ======================== */
+/* ===========================
+   IMAGE STYLE FOOTER
+=========================== */
+
+.image-footer {
+    background: #0b0c14;
+    padding: 60px 6% 25px;
+    margin-top: 60px;
+}
+
+.image-footer-content {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.footer-logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
+}
+
+.image-footer-col h3 {
+    font-size: 22px;
+    color: #ffcc29;
+    font-weight: 700;
+}
+
+.image-footer-col h4 {
+    font-size: 18px;
+    color: #ffcc29;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.footer-desc {
+    margin-top: -5px;
+    color: #ffffff;
+    font-size: 15px;
+}
+
+.footer-small-text {
+    margin-top: 12px;
+    color: #c7c7c7;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* LINKS */
+.image-footer-col a {
+    display: block;
+    color: #e4e4e4;
+    margin-bottom: 8px;
+    text-decoration: none;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.image-footer-col a:hover {
+    color: #ffffff;
+    padding-left: 5px;
+}
+
+/* SOCIAL ICON BOX */
+.footer-social-icons {
+    display: flex;
+    gap: 18px;
+    margin-top: 10px;
+}
+
+.footer-social-icons a {
+    width: 42px;
+    height: 42px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffcc29;
+    font-size: 20px;
+    transition: 0.3s ease;
+}
+
+.footer-social-icons a:hover {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255,204,41,0.4);
+    transform: scale(1.12);
+}
+
+/* LINE */
+.footer-line {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 35px 0 20px 0;
+}
+
+/* BOTTOM TEXT */
+.image-footer-bottom {
+    text-align: center;
+    color: #aaaaaa;
+    font-size: 14px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .image-footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        text-align: center;
+    }
+    .footer-social-icons {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .image-footer-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ================= RESPONSIVE (Mobile) ================= */
+@media (max-width: 900px) {
+
+    /* Reduce header padding for mobile */
+    .main-header {
+        padding: 15px 20px;
+    }
+
+    /* Logo smaller */
+    .logo {
+        width: 42px;
+        height: 42px;
+    }
+
+    .brand-text h2 {
+        font-size: 18px;
+    }
+
+    /* Hide desktop navigation */
+    .nav-links {
+        display: none;
+    }
+
+    /* Show mobile menu button */
+    .mobile-menu-btn {
+        display: block;
+        font-size: 28px;
+    }
+
+    /* Contact section stacks vertically */
+    .contact-wrapper {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        width: 94%;
+        margin-top: 20px;
+    }
+
+    /* Reduce title size */
+    .page-title {
+        font-size: 32px;
+        margin-top: 10px;
+    }
+
+    /* Adjust form + info card padding */
+    .info-card,
+    .form-card {
+        padding: 22px;
+    }
+
+    /* Improve spacing in mobile menu links */
+    .mobile-menu a {
+        font-size: 20px;
+        padding-bottom: 18px;
+    }
+
+    .close-menu {
+        font-size: 32px;
+        top: 18px;
+        right: 22px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="main-header">
+    <div class="header-left">
+        <img src="logo1.webp" class="logo">
+        <div class="brand-text">
+            <h2>STACKLY</h2>
+            <p>Premium Dining Experience</p>
+        </div>
+    </div>
+
+    <!-- Desktop Nav -->
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="contact.html">Contact</a>
+        <a href="login.html">Login</a>
+    </nav>
+
+    <!-- MOBILE MENU BUTTON -->
+    <i class="fas fa-bars mobile-menu-btn" id="openMenu"></i>
+</header>
+
+<!-- MOBILE MENU OVERLAY -->
+<div class="mobile-menu" id="mobileMenu">
+    <i class="fas fa-times close-menu" id="closeMenu"></i>
+
+    <a href="index.html">Home</a>
+    <a href="menu.html">Menu</a>
+    <a href="reviews.html">Reviews</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Login</a>
+</div>
+
+<!-- BACKGROUND -->
+<div class="bg-anim" id="bg"></div>
+
+<h1 class="page-title">Contact Us</h1>
+
+<!-- CONTACT GRID -->
+<div class="contact-wrapper">
+
+    <!-- LEFT SIDE INFO -->
+    <div class="info-card">
+        <h3>Get in Touch</h3>
+
+        <div class="info-item">
+            <h4>📍 Address</h4>
+            <p>MMR Complex, Chinna Thirupathi, near Chinna Muniyappan Kovil, Salem, Tamil Nadu - 636 008</p>
+        </div>
+
+        <div class="info-item">
+            <h4>⏳ Opening Hours</h4>
+            <p>Mon – Sun: 11 AM – 11 PM</p>
+        </div>
+
+        <div class="info-item">
+            <h4>📞 Phone</h4>
+            <p>+91 98765 43210</p>
+        </div>
+
+        <div class="info-item">
+            <h4>📧 Email</h4>
+            <p>support@stacklydining.com</p>
+        </div>
+
+        <div class="info-item">
+            <h4>Follow Us</h4>
+            <div class="social-icons" style="margin-top:10px; display:flex; gap:15px;">
+                <a href="404.html" style="color:#71ffd8; font-size:20px;"><i class="fab fa-facebook-f"></i></a>
+                <a href="404.html" style="color:#71ffd8; font-size:20px;"><i class="fab fa-twitter"></i></a>
+                <a href="404.html" style="color:#71ffd8; font-size:20px;"><i class="fab fa-instagram"></i></a>
+                <a href="404.html" style="color:#71ffd8; font-size:20px;"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+
+        <div class="map">
+            <iframe width="100%" height="230" frameborder="0" loading="lazy" style="border:0;" allowfullscreen 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3913.3211935679234!2d78.15144!3d11.66978!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babf0e7e32d3d29%3A0xced1a01e0dc0633!2sMMR%20Complex%2C%20Chinna%20Thirupathi%2C%20near%20Chinna%20Muniyappan%20Kovil%2C%20Salem%2C%20Tamil%20Nadu%20636008!5e0!3m2!1sen!2sin!4v1707033450000">
+            </iframe>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE FORM -->
+    <div class="form-card">
+        <h3>Send a Message</h3>
+
+        <input type="text" id="name" placeholder="Your Name">
+        <small class="error-msg" id="name-error"></small>
+
+        <input type="email" id="email" placeholder="Your Email">
+        <small class="error-msg" id="email-error"></small>
+
+        <input type="text" id="subject" placeholder="Subject">
+        <small class="error-msg" id="subject-error"></small>
+
+        <textarea id="message" placeholder="Your Message"></textarea>
+        <small class="error-msg" id="message-error"></small>
+
+        <button class="send-btn" id="sendBtn">Send Message</button>
+    </div>
+</div>
+<footer class="image-footer">
+    <div class="image-footer-content">
+
+        <!-- COLUMN 1 -->
+        <div class="image-footer-col">
+            <div class="footer-logo-wrap">
+                <img src="logo1.webp" class="footer-logo">
+                <div>
+                    <h3>STACKLY</h3>
+                    <p class="footer-desc">Fine Dining & Private Events</p>
+                </div>
+            </div>
+            <p class="footer-small-text">
+                Experience luxury dining with handcrafted dishes and a neon-lit ambience.
+            </p>
+        </div>
+
+        <!-- COLUMN 2 -->
+        <div class="image-footer-col">
+            <h4>Quick Links</h4>
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="reviews.html">Reviews</a>
+            <a href="contact.html">Contact</a>
+            <a href="login.html">Login</a>
+        </div>
+
+        <!-- COLUMN 3 -->
+        <div class="image-footer-col">
+            <h4>Contact</h4>
+            <p>📍 123 Premium St, Food City</p>
+            <p>📞 +91 80565 22920</p>
+            <p>⏱ 11:00 AM – 11:00 PM</p>
+        </div>
+
+        <!-- COLUMN 4 -->
+        <div class="image-footer-col">
+            <h4>Follow Us</h4>
+            <div class="footer-social-icons">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-line"></div>
+
+    <div class="image-footer-bottom">
+        © 2025 STACKLY — All Rights Reserved
+    </div>
+</footer>
+
+<script>
+/* ===== FORM VALIDATION ===== */
+const sendBtn = document.getElementById('sendBtn');
+
+sendBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value.trim();
+    const message = document.getElementById('message').value.trim();
+    
+    document.getElementById('name-error').innerText = '';
+    document.getElementById('email-error').innerText = '';
+    document.getElementById('subject-error').innerText = '';
+    document.getElementById('message-error').innerText = '';
+    
+    let valid = true;
+    
+    if(name === '') {
+        document.getElementById('name-error').innerText = 'Please enter your name';
+        valid = false;
+    }
+    
+    if(email === '') {
+        document.getElementById('email-error').innerText = 'Please enter your email';
+        valid = false;
+    } else if(!/^\S+@\S+\.\S+$/.test(email)) {
+        document.getElementById('email-error').innerText = 'Please enter a valid email';
+        valid = false;
+    }
+    
+    if(subject === '') {
+        document.getElementById('subject-error').innerText = 'Please enter the subject';
+        valid = false;
+    }
+    
+    if(message === '') {
+        document.getElementById('message-error').innerText = 'Please enter your message';
+        valid = false;
+    }
+    
+    if(valid) {
+        alert('Message sent successfully!');
+        document.getElementById('name').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('subject').value = '';
+        document.getElementById('message').value = '';
+    }
+});
+
+/* ===== MOBILE MENU SCRIPT ===== */
+const openMenu = document.getElementById("openMenu");
+const closeMenu = document.getElementById("closeMenu");
+const mobileMenu = document.getElementById("mobileMenu");
+
+openMenu.addEventListener("click", () => {
+    mobileMenu.classList.add("active");
+});
+
+closeMenu.addEventListener("click", () => {
+    mobileMenu.classList.remove("active");
+});
+</script>
+
+</body>
+</html>

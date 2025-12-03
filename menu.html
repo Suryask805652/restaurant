@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>STACKLY — Premium Menu</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a0d2e 50%, #2d1b69 100%);
+  color: #fff;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Enhanced Background Animation */
+.background {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+.particle {
+  position: absolute;
+  background: radial-gradient(circle, rgba(255,221,51,0.9) 0%, rgba(74,214,203,0.6) 50%, transparent 70%);
+  border-radius: 50%;
+  animation: float 12s linear infinite;
+  opacity: 0.8;
+  box-shadow: 0 0 20px rgba(255,221,51,0.4);
+}
+@keyframes float {
+  0% { transform: translateY(100vh) scale(0.3) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(-100vh) scale(1.2) rotate(360deg); opacity: 0; }
+}
+
+/* Header */
+.stackly-header {
+  width: 100%;
+  height: 85px;
+  padding: 0 55px;
+  background: rgba(12,12,18,0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 4px 20px rgba(255,221,51,0.2);
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  object-fit: contain;
+}
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.brand-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffdd33;
+  margin-bottom: 2px;
+}
+.brand-sub {
+  font-size: 15px;
+  color: #cccccc;
+  margin-top: 3px;
+}
+
+.header-menu {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.header-menu a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #f5f5f5;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  position: relative;
+}
+.header-menu a:hover {
+  color: #ffe27a;
+  text-shadow: 0 0 10px rgba(255,226,122,0.5);
+}
+.reserve-btn {
+  background: linear-gradient(90deg, #00ff77, #00ffb0);
+  padding: 10px 26px;
+  border-radius: 40px;
+  font-weight: 600 !important;
+  color: #000 !important;
+  box-shadow: 0 0 15px rgba(0,255,120,0.7);
+  transition: .25s;
+}
+.reserve-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 25px rgba(0,255,120,1);
+}
+
+/* Hamburger Menu Button (Mobile) */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+.menu-toggle div {
+  width: 100%;
+  height: 3px;
+  background-color: #ffd700;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+/* Animate Hamburger into X on open */
+.menu-toggle.open div:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.menu-toggle.open div:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle.open div:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile Menu Styles */
+/* Full-Screen Mobile Menu */
+/* --- MOBILE MENU (Screenshot Style) --- */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0c0c14;      /* Same dark tone */
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+  z-index: 1000;
+}
+
+/* Open state */
+.mobile-menu.show {
+  transform: translateX(0);
+}
+
+/* Close (X) button */
+.mobile-close-btn {
+  align-self: flex-end;
+  cursor: pointer;
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffc933;          /* Yellow like screenshot */
+  background: none;
+  border: none;
+  margin-bottom: 10px;
+}
+
+/* Menu links */
+.mobile-menu a {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.12); /* Thin separator line */
+}
+
+/* Remove hover glow */
+.mobile-menu a:hover {
+  color: #ffc933;
+}
+.mobile-close-btn {
+  align-self: flex-end;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffd700;
+  background: none;
+  border: none;
+}
+
+/* Category Filters */
+.category-filters {
+  width: 90%;
+  max-width: 1300px;
+  margin: 40px auto 30px auto;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.category-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffd700;
+  border: 1px solid #ffd700;
+  padding: 10px 25px;
+  border-radius: 40px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  min-width: 90px;
+  text-align: center;
+}
+.category-btn:hover,
+.category-btn.active {
+  background: #ffd700;
+  color: #1a0d2e;
+  box-shadow: 0 0 15px #ffd700;
+  outline: none;
+}
+
+/* Page title */
+h1 {
+  margin-top: 120px;
+  margin-bottom: 40px;
+  font-size: 48px;
+  text-align: center;
+  background: linear-gradient(45deg, #ffd700, #00d4ff, #ff6b9d);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease infinite;
+  text-shadow: 0 0 30px rgba(255,215,0,0.3);
+}
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Features Section */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto 60px auto;
+}
+.feature-card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,221,51,0.2);
+  padding: 35px 25px;
+  border-radius: 25px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,221,51,0.1), transparent);
+  transition: left 0.6s;
+}
+.feature-card:hover::before {
+  left: 100%;
+}
+.feature-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(255,221,51,0.3);
+  border-color: #ffd700;
+}
+.feature-card h3 {
+  color: #ffd700;
+  font-size: 22px;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+.feature-card p {
+  color: rgba(255,255,255,0.9);
+  line-height: 1.6;
+}
+
+/* Menu grid */
+.menu-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 35px;
+  width: 90%;
+  max-width: 1300px;
+  margin: 0 auto 80px auto;
+}
+.menu-card {
+  background: rgba(20,25,60,0.85);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255,221,51,0.3);
+  border-radius: 25px;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+.menu-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ffd700, #00d4ff, #ff6b9d, #ffd700);
+  background-size: 300% 100%;
+  animation: headerGlow 3s ease infinite;
+}
+@keyframes headerGlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.menu-card:hover {
+  transform: translateY(-15px) scale(1.03);
+  box-shadow: 0 30px 60px rgba(255,221,51,0.25);
+  border-color: rgba(255,221,51,0.6);
+}
+.menu-image {
+  width: 100%;
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+}
+.menu-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.menu-card:hover .menu-image img {
+  transform: scale(1.1);
+}
+.menu-content {
+  padding: 30px 25px;
+  text-align: center;
+}
+.menu-card h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffd700;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 10px rgba(255,215,0,0.3);
+}
+.menu-card p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.menu-price {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: #00d4ff;
+  text-shadow: 0 0 15px rgba(0,212,255,0.5);
+  margin-bottom: 20px;
+  animation: pricePulse 2s ease-in-out infinite;
+}
+@keyframes pricePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Footer */
+.image-footer {
+    background: #0b0c14;
+    padding: 60px 6% 25px;
+    margin-top: 60px;
+}
+
+.image-footer-content {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.footer-logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
+}
+
+.image-footer-col h3 {
+    font-size: 22px;
+    color: #ffcc29;
+    font-weight: 700;
+}
+
+.image-footer-col h4 {
+    font-size: 18px;
+    color: #ffcc29;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.footer-desc {
+    margin-top: -5px;
+    color: #ffffff;
+    font-size: 15px;
+}
+
+.footer-small-text {
+    margin-top: 12px;
+    color: #c7c7c7;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* LINKS */
+.image-footer-col a {
+    display: block;
+    color: #e4e4e4;
+    margin-bottom: 8px;
+    text-decoration: none;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.image-footer-col a:hover {
+    color: #ffffff;
+    padding-left: 5px;
+}
+
+/* SOCIAL ICON BOX */
+.footer-social-icons {
+    display: flex;
+    gap: 18px;
+    margin-top: 10px;
+}
+
+.footer-social-icons a {
+    width: 42px;
+    height: 42px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffcc29;
+    font-size: 20px;
+    transition: 0.3s ease;
+}
+
+.footer-social-icons a:hover {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255,204,41,0.4);
+    transform: scale(1.12);
+}
+
+/* LINE */
+.footer-line {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 35px 0 20px 0;
+}
+
+/* BOTTOM TEXT */
+.image-footer-bottom {
+    text-align: center;
+    color: #aaaaaa;
+    font-size: 14px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .image-footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        text-align: center;
+    }
+    .footer-social-icons {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .image-footer-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* WhatsApp Bubble */
+.whatsapp-order {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  background: linear-gradient(135deg, #0fc15b, #00ff88);
+  padding: 15px 20px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(0,255,100,0.4);
+  transition: all 0.3s ease;
+}
+.whatsapp-order:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(0,255,100,0.6);
+}
+.whatsapp-order img {
+  width: 24px;
+}
+
+/* Responsive */
+/* --------------------------------------------------
+   RESPONSIVE — MOBILE & TABLET (≤ 768px)
+-------------------------------------------------- */
+@media (max-width: 768px) {
+
+  /* Hide desktop menu */
+  .header-menu {
+    display: none;
+  }
+
+  /* Show hamburger icon */
+  .menu-toggle {
+    display: flex;
+  }
+
+  /* Adjust header spacing */
+  .stackly-header {
+    padding: 0 25px;
+    height: 75px;
+  }
+
+  .brand-title {
+    font-size: 16px;
+  }
+
+  .brand-sub {
+    font-size: 13px;
+  }
+
+  /* Mobile full-screen menu */
+  .mobile-menu {
+    padding: 30px 25px;
+    gap: 28px;
+  }
+
+  .mobile-menu a {
+    font-size: 18px;
+    padding-bottom: 10px;
+  }
+
+  .mobile-close-btn {
+    font-size: 30px;
+  }
+
+  /* Smaller page title */
+  h1 {
+    font-size: 32px;
+    margin-top: 110px;
+    margin-bottom: 30px;
+  }
+
+  /* Cards become full-width */
+  .menu-container {
+    width: 95%;
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .features {
+    width: 95%;
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  /* Category buttons tighter spacing */
+  .category-filters {
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+  }
+
+  .category-btn {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+
+  /* WhatsApp button smaller */
+  .whatsapp-order {
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 16px;
+  }
+
+  .whatsapp-order img {
+    width: 22px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="background" id="bg"></div>
+
+<header class="stackly-header">
+  <div class="header-left">
+    <img src="logo1.webp" class="header-logo" alt="STACKLY Logo">
+    <div class="brand-text">
+      <span class="brand-title">STACKLY</span>
+      <small class="brand-sub">Premium Dining Experience</small>
+    </div>
+  </div>
+
+  <!-- Desktop Menu -->
+  <nav class="header-menu" aria-label="Primary navigation">
+    <a href="index.html">Home</a>
+    <a href="menu.html">Menu</a>
+    <a href="Reviews.html">Reviews</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Login</a>
+    <!-- <a href="contact.html" class="reserve-btn">Reserve</a> -->
+  </nav>
+
+  <!-- Hamburger Button for Mobile -->
+  <button aria-label="Open menu" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu">
+    <div></div>
+    <div></div>
+    <div></div>
+  </button>
+</header>
+
+<!-- Mobile Menu -->
+<nav class="mobile-menu" id="mobile-menu">
+  <button class="mobile-close-btn" id="mobile-close">&times;</button>
+
+  <a href="index.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="Reviews.html">Reviews</a>
+  <a href="contact.html">Contact</a>
+  <a href="login.html">Login</a>
+</nav>
+
+
+<h1>Our Premium Menu</h1>
+
+<div class="features">
+  <div class="feature-card">
+    <h3>🌿 Fresh Ingredients</h3>
+    <p>Sourced daily from local farms and premium suppliers for unmatched quality.</p>
+  </div>
+  <div class="feature-card">
+    <h3>⚡ Lightning Delivery</h3>
+    <p>Hot food delivered to your door in under 30 minutes, guaranteed.</p>
+  </div>
+  <div class="feature-card">
+    <h3>👨‍🍳 Master Chefs</h3>
+    <p>Exclusive recipes crafted by award-winning culinary experts.</p>
+  </div>
+  <div class="feature-card">
+    <h3>🍽️ Tailored Meal Plans</h3>
+    <p>Personalized menu options designed to fit your dietary needs and preferences.</p>
+  </div>
+  <div class="feature-card">
+    <h3>🥂 Exclusive Wine Pairings</h3>
+    <p>Professional sommelier-selected wines to perfectly complement your meal.</p>
+  </div>
+  <div class="feature-card">
+    <h3>🎉 Private Event Catering</h3>
+    <p>Customized meals and premium services for your special occasions and events.</p>
+  </div>
+</div>
+
+<!-- Category Filters -->
+<div class="category-filters" role="tablist" aria-label="Menu categories">
+  <button class="category-btn active" data-category="all" role="tab" aria-selected="true" tabindex="0">All</button>
+  <button class="category-btn" data-category="veg" role="tab" aria-selected="false" tabindex="-1">Veg</button>
+  <button class="category-btn" data-category="nonveg" role="tab" aria-selected="false" tabindex="-1">Non-Veg</button>
+</div>
+
+<!-- Menu items with categories -->
+<div class="menu-container">
+  <div class="menu-card" data-category="veg">
+    <div class="menu-image">
+      <img src="masaladosa.webp" alt="Masala Dosa">
+    </div>
+    <div class="menu-content">
+      <h3>Masala Dosa</h3>
+      <p>Crispy golden dosa filled with aromatic spiced potatoes, served with sambar and three chutneys.</p>
+      <span class="menu-price">₹120</span>
+    </div>
+  </div>
+
+  <div class="menu-card" data-category="veg">
+    <div class="menu-image">
+      <img src="idli.webp" alt="Idli Sambar">
+    </div>
+    <div class="menu-content">
+      <h3>Idli Sambar</h3>
+      <p>Fluffy steamed rice cakes paired with flavorful lentil sambar and coconut chutney.</p>
+      <span class="menu-price">₹80</span>
+    </div>
+  </div>
+
+  <div class="menu-card" data-category="veg">
+    <div class="menu-image">
+      <img src="medu.webp" alt="Medu Vada">
+    </div>
+    <div class="menu-content">
+      <h3>Medu Vada</h3>
+      <p>Crispy lentil fritters served hot with sambar and a trio of flavorful chutneys.</p>
+      <span class="menu-price">₹90</span>
+    </div>
+  </div>
+
+  <div class="menu-card" data-category="veg">
+    <div class="menu-image">
+      <img src="venpongal.webp" alt="Ven Pongal">
+    </div>
+    <div class="menu-content">
+      <h3>Ven Pongal</h3>
+      <p>Velvety rice and lentil porridge tempered with black pepper, cumin and cashews.</p>
+      <span class="menu-price">₹100</span>
+    </div>
+  </div>
+
+  <div class="menu-card" data-category="veg">
+    <div class="menu-image">
+      <img src="OnionUttapam.webp" alt="Onion Uttapam">
+    </div>
+    <div class="menu-content">
+      <h3>Onion Uttapam</h3>
+      <p>Thick soft uttapam topped with caramelized onions, tomatoes and green chilies.</p>
+      <span class="menu-price">₹110</span>
+    </div>
+  </div>
+
+  <div class="menu-card" data-category="veg">
+    <div class="menu-image">
+      <img src="palakpanner.webp" alt="Palak Paneer">
+    </div>
+    <div class="menu-content">
+      <h3>Palak Paneer</h3>
+      <p>Silky spinach gravy with succulent cottage cheese cubes and aromatic spices.</p>
+      <span class="menu-price">₹150</span>
+    </div>
+  </div>
+  
+  <div class="menu-card" data-category="nonveg">
+    <div class="menu-image">
+      <img src="chiken.webp" alt="Chicken Curry">
+    </div>
+    <div class="menu-content">
+      <h3>Chicken Curry</h3>
+      <p>Spicy, flavorful chicken curry slow-cooked with traditional spices.</p>
+      <span class="menu-price">₹180</span>
+    </div>
+  </div>
+  
+  <div class="menu-card" data-category="nonveg">
+    <div class="menu-image">
+      <img src="fishfry.webp" alt="Fish Fry">
+    </div>
+    <div class="menu-content">
+      <h3>Fish Fry</h3>
+      <p>Crispy fried fish marinated with local herbs and spices.</p>
+      <span class="menu-price">₹200</span>
+    </div>
+  </div>
+</div>
+
+<footer class="image-footer">
+    <div class="image-footer-content">
+
+        <!-- COLUMN 1 -->
+        <div class="image-footer-col">
+            <div class="footer-logo-wrap">
+                <img src="logo1.webp" class="footer-logo">
+                <div>
+                    <h3>STACKLY</h3>
+                    <p class="footer-desc">Fine Dining & Private Events</p>
+                </div>
+            </div>
+            <p class="footer-small-text">
+                Experience luxury dining with handcrafted dishes and a neon-lit ambience.
+            </p>
+        </div>
+
+        <!-- COLUMN 2 -->
+        <div class="image-footer-col">
+            <h4>Quick Links</h4>
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="reviews.html">Reviews</a>
+            <a href="contact.html">Contact</a>
+            <a href="login.html">Login</a>
+        </div>
+
+        <!-- COLUMN 3 -->
+        <div class="image-footer-col">
+            <h4>Contact</h4>
+            <p>📍 123 Premium St, Food City</p>
+            <p>📞 +91 80565 22920</p>
+            <p>⏱ 11:00 AM – 11:00 PM</p>
+        </div>
+
+        <!-- COLUMN 4 -->
+        <div class="image-footer-col">
+            <h4>Follow Us</h4>
+            <div class="footer-social-icons">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-line"></div>
+
+    <div class="image-footer-bottom">
+        © 2025 STACKLY — All Rights Reserved
+    </div>
+</footer>
+
+<a href="404.html" target="_blank" class="whatsapp-order" aria-label="Order on WhatsApp">
+  <img src="https://img.icons8.com/ios-filled/50/ffffff/whatsapp.png" alt="WhatsApp Icon">
+  <span>Order Now</span>
+</a>
+
+<script>
+// Enhanced particle system with more variety
+const bg = document.getElementById('bg');
+for (let i = 0; i < 80; i++) {
+  let p = document.createElement('div');
+  p.classList.add('particle');
+  p.style.width = p.style.height = `${Math.random()*20+6}px`;
+  p.style.left = `${Math.random()*100}%`;
+  p.style.animationDuration = `${Math.random()*18+8}s`;
+  p.style.animationDelay = `${Math.random()*12}s`;
+  p.style.background = `radial-gradient(circle, rgba(${Math.random()*100+155},${Math.random()*100+200},${Math.random()*100+255},0.8) 0%, transparent 70%)`;
+  bg.appendChild(p);
+}
+
+// Mobile Menu toggle
+const menuToggle = document.getElementById('menu-toggle');
+const mobileMenu  = document.getElementById('mobile-menu');
+const mobileClose = document.getElementById('mobile-close');
+
+menuToggle.addEventListener('click', () => {
+  menuToggle.classList.toggle('open');
+  mobileMenu.classList.toggle('show');
+  document.body.style.overflow = "hidden";   // Stop scroll
+});
+
+mobileClose.addEventListener('click', () => {
+  menuToggle.classList.remove('open');
+  mobileMenu.classList.remove('show');
+  document.body.style.overflow = "auto";
+});
+
+// Category filter buttons for menu toggling
+const categoryButtons = document.querySelectorAll('.category-btn');
+const menuCards = document.querySelectorAll('.menu-card');
+
+categoryButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    categoryButtons.forEach(btn => {
+      btn.classList.remove('active');
+      btn.setAttribute('aria-selected', 'false');
+      btn.setAttribute('tabindex', '-1');
+    });
+    button.classList.add('active');
+    button.setAttribute('aria-selected', 'true');
+    button.setAttribute('tabindex', '0');
+    
+    const category = button.dataset.category;
+    menuCards.forEach(card => {
+      if(category === 'all' || card.dataset.category === category) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>
